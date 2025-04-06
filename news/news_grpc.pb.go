@@ -20,12 +20,6 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	News_GetFavorites_FullMethodName               = "/news.News/GetFavorites"
-	News_HasFavorites_FullMethodName               = "/news.News/HasFavorites"
-	News_ToggleFavorite_FullMethodName             = "/news.News/ToggleFavorite"
-	News_MoveFavorite_FullMethodName               = "/news.News/MoveFavorite"
-	News_CreateFavoriteFolder_FullMethodName       = "/news.News/CreateFavoriteFolder"
-	News_UpdateFavoriteFolder_FullMethodName       = "/news.News/UpdateFavoriteFolder"
 	News_GetFilters_FullMethodName                 = "/news.News/GetFilters"
 	News_GetFiltersShort_FullMethodName            = "/news.News/GetFiltersShort"
 	News_GetArticlesByFilter_FullMethodName        = "/news.News/GetArticlesByFilter"
@@ -40,12 +34,6 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NewsClient interface {
-	GetFavorites(ctx context.Context, in *GetFavoritesParams, opts ...grpc.CallOption) (*GetFavoritesResponse, error)
-	HasFavorites(ctx context.Context, in *HasFavoritesParams, opts ...grpc.CallOption) (*HasFavoritesResponse, error)
-	ToggleFavorite(ctx context.Context, in *ToggleFavoriteParams, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	MoveFavorite(ctx context.Context, in *MoveFavoriteParams, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	CreateFavoriteFolder(ctx context.Context, in *CreateFavoriteFolderParams, opts ...grpc.CallOption) (*FavoriteFolder, error)
-	UpdateFavoriteFolder(ctx context.Context, in *UpdateFavoriteFolderParams, opts ...grpc.CallOption) (*FavoriteFolder, error)
 	GetFilters(ctx context.Context, in *GetFiltersParams, opts ...grpc.CallOption) (*GetFiltersResponse, error)
 	GetFiltersShort(ctx context.Context, in *GetFiltersParams, opts ...grpc.CallOption) (*GetFiltersShortResponse, error)
 	GetArticlesByFilter(ctx context.Context, in *GetArticlesByFilterParams, opts ...grpc.CallOption) (*GetArticlesShortResponse, error)
@@ -62,66 +50,6 @@ type newsClient struct {
 
 func NewNewsClient(cc grpc.ClientConnInterface) NewsClient {
 	return &newsClient{cc}
-}
-
-func (c *newsClient) GetFavorites(ctx context.Context, in *GetFavoritesParams, opts ...grpc.CallOption) (*GetFavoritesResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetFavoritesResponse)
-	err := c.cc.Invoke(ctx, News_GetFavorites_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *newsClient) HasFavorites(ctx context.Context, in *HasFavoritesParams, opts ...grpc.CallOption) (*HasFavoritesResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HasFavoritesResponse)
-	err := c.cc.Invoke(ctx, News_HasFavorites_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *newsClient) ToggleFavorite(ctx context.Context, in *ToggleFavoriteParams, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, News_ToggleFavorite_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *newsClient) MoveFavorite(ctx context.Context, in *MoveFavoriteParams, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, News_MoveFavorite_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *newsClient) CreateFavoriteFolder(ctx context.Context, in *CreateFavoriteFolderParams, opts ...grpc.CallOption) (*FavoriteFolder, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FavoriteFolder)
-	err := c.cc.Invoke(ctx, News_CreateFavoriteFolder_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *newsClient) UpdateFavoriteFolder(ctx context.Context, in *UpdateFavoriteFolderParams, opts ...grpc.CallOption) (*FavoriteFolder, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(FavoriteFolder)
-	err := c.cc.Invoke(ctx, News_UpdateFavoriteFolder_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *newsClient) GetFilters(ctx context.Context, in *GetFiltersParams, opts ...grpc.CallOption) (*GetFiltersResponse, error) {
@@ -208,12 +136,6 @@ func (c *newsClient) RemoveFilter(ctx context.Context, in *RemoveFilterParams, o
 // All implementations must embed UnimplementedNewsServer
 // for forward compatibility.
 type NewsServer interface {
-	GetFavorites(context.Context, *GetFavoritesParams) (*GetFavoritesResponse, error)
-	HasFavorites(context.Context, *HasFavoritesParams) (*HasFavoritesResponse, error)
-	ToggleFavorite(context.Context, *ToggleFavoriteParams) (*emptypb.Empty, error)
-	MoveFavorite(context.Context, *MoveFavoriteParams) (*emptypb.Empty, error)
-	CreateFavoriteFolder(context.Context, *CreateFavoriteFolderParams) (*FavoriteFolder, error)
-	UpdateFavoriteFolder(context.Context, *UpdateFavoriteFolderParams) (*FavoriteFolder, error)
 	GetFilters(context.Context, *GetFiltersParams) (*GetFiltersResponse, error)
 	GetFiltersShort(context.Context, *GetFiltersParams) (*GetFiltersShortResponse, error)
 	GetArticlesByFilter(context.Context, *GetArticlesByFilterParams) (*GetArticlesShortResponse, error)
@@ -232,24 +154,6 @@ type NewsServer interface {
 // pointer dereference when methods are called.
 type UnimplementedNewsServer struct{}
 
-func (UnimplementedNewsServer) GetFavorites(context.Context, *GetFavoritesParams) (*GetFavoritesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetFavorites not implemented")
-}
-func (UnimplementedNewsServer) HasFavorites(context.Context, *HasFavoritesParams) (*HasFavoritesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HasFavorites not implemented")
-}
-func (UnimplementedNewsServer) ToggleFavorite(context.Context, *ToggleFavoriteParams) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ToggleFavorite not implemented")
-}
-func (UnimplementedNewsServer) MoveFavorite(context.Context, *MoveFavoriteParams) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MoveFavorite not implemented")
-}
-func (UnimplementedNewsServer) CreateFavoriteFolder(context.Context, *CreateFavoriteFolderParams) (*FavoriteFolder, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateFavoriteFolder not implemented")
-}
-func (UnimplementedNewsServer) UpdateFavoriteFolder(context.Context, *UpdateFavoriteFolderParams) (*FavoriteFolder, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateFavoriteFolder not implemented")
-}
 func (UnimplementedNewsServer) GetFilters(context.Context, *GetFiltersParams) (*GetFiltersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFilters not implemented")
 }
@@ -293,114 +197,6 @@ func RegisterNewsServer(s grpc.ServiceRegistrar, srv NewsServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&News_ServiceDesc, srv)
-}
-
-func _News_GetFavorites_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetFavoritesParams)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NewsServer).GetFavorites(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: News_GetFavorites_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NewsServer).GetFavorites(ctx, req.(*GetFavoritesParams))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _News_HasFavorites_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HasFavoritesParams)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NewsServer).HasFavorites(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: News_HasFavorites_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NewsServer).HasFavorites(ctx, req.(*HasFavoritesParams))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _News_ToggleFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ToggleFavoriteParams)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NewsServer).ToggleFavorite(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: News_ToggleFavorite_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NewsServer).ToggleFavorite(ctx, req.(*ToggleFavoriteParams))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _News_MoveFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MoveFavoriteParams)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NewsServer).MoveFavorite(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: News_MoveFavorite_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NewsServer).MoveFavorite(ctx, req.(*MoveFavoriteParams))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _News_CreateFavoriteFolder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateFavoriteFolderParams)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NewsServer).CreateFavoriteFolder(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: News_CreateFavoriteFolder_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NewsServer).CreateFavoriteFolder(ctx, req.(*CreateFavoriteFolderParams))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _News_UpdateFavoriteFolder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateFavoriteFolderParams)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NewsServer).UpdateFavoriteFolder(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: News_UpdateFavoriteFolder_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NewsServer).UpdateFavoriteFolder(ctx, req.(*UpdateFavoriteFolderParams))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _News_GetFilters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -554,30 +350,6 @@ var News_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "news.News",
 	HandlerType: (*NewsServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetFavorites",
-			Handler:    _News_GetFavorites_Handler,
-		},
-		{
-			MethodName: "HasFavorites",
-			Handler:    _News_HasFavorites_Handler,
-		},
-		{
-			MethodName: "ToggleFavorite",
-			Handler:    _News_ToggleFavorite_Handler,
-		},
-		{
-			MethodName: "MoveFavorite",
-			Handler:    _News_MoveFavorite_Handler,
-		},
-		{
-			MethodName: "CreateFavoriteFolder",
-			Handler:    _News_CreateFavoriteFolder_Handler,
-		},
-		{
-			MethodName: "UpdateFavoriteFolder",
-			Handler:    _News_UpdateFavoriteFolder_Handler,
-		},
 		{
 			MethodName: "GetFilters",
 			Handler:    _News_GetFilters_Handler,
