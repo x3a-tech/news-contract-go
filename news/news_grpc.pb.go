@@ -20,18 +20,20 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	News_GetFavorites_FullMethodName         = "/news.News/GetFavorites"
-	News_HasFavorites_FullMethodName         = "/news.News/HasFavorites"
-	News_ToggleFavorite_FullMethodName       = "/news.News/ToggleFavorite"
-	News_MoveFavorite_FullMethodName         = "/news.News/MoveFavorite"
-	News_CreateFavoriteFolder_FullMethodName = "/news.News/CreateFavoriteFolder"
-	News_UpdateFavoriteFolder_FullMethodName = "/news.News/UpdateFavoriteFolder"
-	News_GetFilters_FullMethodName           = "/news.News/GetFilters"
-	News_GetFiltersShort_FullMethodName      = "/news.News/GetFiltersShort"
-	News_GetArticlesByFilter_FullMethodName  = "/news.News/GetArticlesByFilter"
-	News_UpdateFilter_FullMethodName         = "/news.News/UpdateFilter"
-	News_UpdateFilterSources_FullMethodName  = "/news.News/UpdateFilterSources"
-	News_RemoveFilter_FullMethodName         = "/news.News/RemoveFilter"
+	News_GetFavorites_FullMethodName               = "/news.News/GetFavorites"
+	News_HasFavorites_FullMethodName               = "/news.News/HasFavorites"
+	News_ToggleFavorite_FullMethodName             = "/news.News/ToggleFavorite"
+	News_MoveFavorite_FullMethodName               = "/news.News/MoveFavorite"
+	News_CreateFavoriteFolder_FullMethodName       = "/news.News/CreateFavoriteFolder"
+	News_UpdateFavoriteFolder_FullMethodName       = "/news.News/UpdateFavoriteFolder"
+	News_GetFilters_FullMethodName                 = "/news.News/GetFilters"
+	News_GetFiltersShort_FullMethodName            = "/news.News/GetFiltersShort"
+	News_GetArticlesByFilter_FullMethodName        = "/news.News/GetArticlesByFilter"
+	News_CreateFilter_FullMethodName               = "/news.News/CreateFilter"
+	News_CreateFilterFromCategories_FullMethodName = "/news.News/CreateFilterFromCategories"
+	News_UpdateFilter_FullMethodName               = "/news.News/UpdateFilter"
+	News_UpdateFilterSources_FullMethodName        = "/news.News/UpdateFilterSources"
+	News_RemoveFilter_FullMethodName               = "/news.News/RemoveFilter"
 )
 
 // NewsClient is the client API for News service.
@@ -47,6 +49,8 @@ type NewsClient interface {
 	GetFilters(ctx context.Context, in *GetFiltersParams, opts ...grpc.CallOption) (*GetFiltersResponse, error)
 	GetFiltersShort(ctx context.Context, in *GetFiltersParams, opts ...grpc.CallOption) (*GetFiltersShortResponse, error)
 	GetArticlesByFilter(ctx context.Context, in *GetArticlesByFilterParams, opts ...grpc.CallOption) (*GetArticlesShortResponse, error)
+	CreateFilter(ctx context.Context, in *CreateFilterParams, opts ...grpc.CallOption) (*Filter, error)
+	CreateFilterFromCategories(ctx context.Context, in *CreateFilterFromCategoriesParams, opts ...grpc.CallOption) (*Filter, error)
 	UpdateFilter(ctx context.Context, in *UpdateFilterParams, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateFilterSources(ctx context.Context, in *UpdateFilterSourcesParams, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	RemoveFilter(ctx context.Context, in *RemoveFilterParams, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -150,6 +154,26 @@ func (c *newsClient) GetArticlesByFilter(ctx context.Context, in *GetArticlesByF
 	return out, nil
 }
 
+func (c *newsClient) CreateFilter(ctx context.Context, in *CreateFilterParams, opts ...grpc.CallOption) (*Filter, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Filter)
+	err := c.cc.Invoke(ctx, News_CreateFilter_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *newsClient) CreateFilterFromCategories(ctx context.Context, in *CreateFilterFromCategoriesParams, opts ...grpc.CallOption) (*Filter, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Filter)
+	err := c.cc.Invoke(ctx, News_CreateFilterFromCategories_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *newsClient) UpdateFilter(ctx context.Context, in *UpdateFilterParams, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -193,6 +217,8 @@ type NewsServer interface {
 	GetFilters(context.Context, *GetFiltersParams) (*GetFiltersResponse, error)
 	GetFiltersShort(context.Context, *GetFiltersParams) (*GetFiltersShortResponse, error)
 	GetArticlesByFilter(context.Context, *GetArticlesByFilterParams) (*GetArticlesShortResponse, error)
+	CreateFilter(context.Context, *CreateFilterParams) (*Filter, error)
+	CreateFilterFromCategories(context.Context, *CreateFilterFromCategoriesParams) (*Filter, error)
 	UpdateFilter(context.Context, *UpdateFilterParams) (*emptypb.Empty, error)
 	UpdateFilterSources(context.Context, *UpdateFilterSourcesParams) (*emptypb.Empty, error)
 	RemoveFilter(context.Context, *RemoveFilterParams) (*emptypb.Empty, error)
@@ -232,6 +258,12 @@ func (UnimplementedNewsServer) GetFiltersShort(context.Context, *GetFiltersParam
 }
 func (UnimplementedNewsServer) GetArticlesByFilter(context.Context, *GetArticlesByFilterParams) (*GetArticlesShortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticlesByFilter not implemented")
+}
+func (UnimplementedNewsServer) CreateFilter(context.Context, *CreateFilterParams) (*Filter, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFilter not implemented")
+}
+func (UnimplementedNewsServer) CreateFilterFromCategories(context.Context, *CreateFilterFromCategoriesParams) (*Filter, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFilterFromCategories not implemented")
 }
 func (UnimplementedNewsServer) UpdateFilter(context.Context, *UpdateFilterParams) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFilter not implemented")
@@ -425,6 +457,42 @@ func _News_GetArticlesByFilter_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _News_CreateFilter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateFilterParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NewsServer).CreateFilter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: News_CreateFilter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NewsServer).CreateFilter(ctx, req.(*CreateFilterParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _News_CreateFilterFromCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateFilterFromCategoriesParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NewsServer).CreateFilterFromCategories(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: News_CreateFilterFromCategories_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NewsServer).CreateFilterFromCategories(ctx, req.(*CreateFilterFromCategoriesParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _News_UpdateFilter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateFilterParams)
 	if err := dec(in); err != nil {
@@ -521,6 +589,14 @@ var News_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetArticlesByFilter",
 			Handler:    _News_GetArticlesByFilter_Handler,
+		},
+		{
+			MethodName: "CreateFilter",
+			Handler:    _News_CreateFilter_Handler,
+		},
+		{
+			MethodName: "CreateFilterFromCategories",
+			Handler:    _News_CreateFilterFromCategories_Handler,
 		},
 		{
 			MethodName: "UpdateFilter",
